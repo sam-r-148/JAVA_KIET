@@ -8,24 +8,24 @@ interface Booking {
 interface Ride {
     int id = 0;
     int price = 0;
-}
 
+
+}
 abstract class CabRide implements Booking, Ride {
     int id;
-    int price;
 
+    int price;
     public void book() {
         System.out.println("Cab " + id + " booked. Price: " + price);
     }
-
     public void cancel() {
         int refund = price - 100;
         System.out.println("Cab " + id + " cancelled. Refund: " + refund);
     }
 }
-
 abstract class TrainRide implements Booking, Ride {
     int id;
+
     int price;
 
     public void book() {
@@ -38,15 +38,16 @@ abstract class TrainRide implements Booking, Ride {
     }
 }
 
+
+
 abstract class BusRide implements Booking, Ride {
     int id;
     int price;
-
     public void book() {
         System.out.println("Bus " + id + " booked. Price: " + price);
     }
-
     public void cancel() {
+
         System.out.println("Bus " + id + " cancelled. No refund");
     }
 }
@@ -56,24 +57,23 @@ public class Test {
 
         CabRide cab = new CabRide() {
             {
-                id = 1;
-                price = 500;
-            }
+
+            id =1;
+            price =500;
+        }
         };
 
         TrainRide train = new TrainRide() {
             {
                 id = 2;
-                price = 1000;
-            }
+                price = 1000;}
         };
 
         BusRide bus = new BusRide() {
             {
                 id = 3;
                 price = 200;
-            }
-        };
+            }};
 
         try {
             cab.book();
@@ -81,14 +81,12 @@ public class Test {
         } catch (Exception e) {
             System.out.println("Error in cab");
         }
-
         try {
             train.book();
             train.cancel();
         } catch (Exception e) {
             System.out.println("Error in train");
         }
-
         try {
             bus.book();
             bus.cancel();
