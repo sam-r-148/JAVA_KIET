@@ -1,75 +1,99 @@
-//Cab - 500 CAB101 at 10:00 and cancels refund 300
-//Train - 1200 TRN202 train is confirmed and later cancel refund 1000
-//Bus - 200 BUS303 no facility to cancel
-
-
-
 package ClassTest;
 
-abstract class Booking {
-    double amount;
-    String transactionId;
-
-    Booking(double amount, String transactionId) {
-        this.amount = amount;
-        this.transactionId = transactionId;}
-
-    void generateReceipt() {
-        System.out.println("Receipt: Txn " + transactionId + " for amount " + amount);
-    }
-    abstract void processPayment();
-}
-interface Refundable {
-    void refund(double amount);
-}
-interface Cancelable {
+interface Booking {
+    void book();
     void cancel();
 }
 
-class Cab extends Booking implements Refundable, Cancelable {
-    Cab(double amount, String transactionId) {
-        super(amount, transactionId);
+interface Ride {
+    int id = 0;
+    int price = 0;
+}
+
+abstract class CabRide implements Booking, Ride {
+    int id;
+    int price;
+
+    public void book() {
+        System.out.println("Cab " + id + " booked. Price: " + price);
     }
 
-    @Override
     public void cancel() {
-        System.out.println("Cab cancelled");
+        int refund = price - 100;
+        System.out.println("Cab " + id + " cancelled. Refund: " + refund);
     }
 }
 
-class train extends Booking implements Refundable, Cancelable {
-    train(double amount, String transactionId) {
-        super(amount, transactionId);
+abstract class TrainRide implements Booking, Ride {
+    int id;
+    int price;
+
+    public void book() {
+        System.out.println("Train " + id + " booked. Price: " + price);
     }
-    @Override
+
     public void cancel() {
-        System.out.println("Train cancelled");
-    }
-}
-class Bus extends Booking implements Refundable {
-    Bus(double amount, String transactionId) {
-        super(amount, transactionId);
+        int refund = price - 200;
+        System.out.println("Train " + id + " cancelled. Refund: " + refund);
     }
 }
 
+abstract class BusRide implements Booking, Ride {
+    int id;
+    int price;
+
+    public void book() {
+        System.out.println("Bus " + id + " booked. Price: " + price);
+    }
+
+    public void cancel() {
+        System.out.println("Bus " + id + " cancelled. No refund");
+    }
+}
 
 public class Test {
     public static void main(String[] args) {
-        Cab cab = new Cab(500, "CAB101");
-        train train = new train(1200, "TRN202");
-        Bus bus = new Bus(200, "BUS303");
-        cab.processPayment();
-        train.processPayment();
-        bus.processPayment();
-        cab.cancel();
-        train.cancel();
-        cab.refund(300);
-        train.refund(1000);
-        bus.refund(200);
-        cab.generateReceipt();
-        train.generateReceipt();
-        bus.generateReceipt();
 
+        CabRide cab = new CabRide() {
+            {
+                id = 1;
+                price = 500;
+            }
+        };
+
+        TrainRide train = new TrainRide() {
+            {
+                id = 2;
+                price = 1000;
+            }
+        };
+
+        BusRide bus = new BusRide() {
+            {
+                id = 3;
+                price = 200;
+            }
+        };
+
+        try {
+            cab.book();
+            cab.cancel();
+        } catch (Exception e) {
+            System.out.println("Error in cab");
+        }
+
+        try {
+            train.book();
+            train.cancel();
+        } catch (Exception e) {
+            System.out.println("Error in train");
+        }
+
+        try {
+            bus.book();
+            bus.cancel();
+        } catch (Exception e) {
+            System.out.println("Error in bus");
+        }
     }
 }
-
