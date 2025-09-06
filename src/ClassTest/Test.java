@@ -1,97 +1,95 @@
 package ClassTest;
 
-interface Booking {
-    void book();
-    void cancel();
+abstract class Payments{
+    double amount;
+    String id;
+    Payments(double amount,String id){
+        this.amount = amount;
+        this.id = id;
+    }
+    void generateReceipt(){
+        System.out.println("Transaction id: " + id + "is Generated for amount :" + amount );
+    }
+    abstract void pay();
+}
+interface Refundable{
+    void refund(double amount);
+}
+interface CancelRide{
+    void cancelRide();
 }
 
-interface Ride {
-    int id = 0;
-    int price = 0;
-
-
-}
-abstract class CabRide implements Booking, Ride {
-    int id;
-
-    int price;
-    public void book() {
-        System.out.println("Cab " + id + " booked. Price: " + price);
+class Cab extends Payments implements Refundable,CancelRide{
+    Cab(double amount,String id){
+        super(amount,id);
     }
-    public void cancel() {
-        int refund = price - 100;
-        System.out.println("Cab " + id + " cancelled. Refund: " + refund);
+    @Override
+    public void refund(double amount){
+        System.out.println("The Refunded Amount for Cancelling ride is : 300" );
     }
-}
-abstract class TrainRide implements Booking, Ride {
-    int id;
-
-    int price;
-
-    public void book() {
-        System.out.println("Train " + id + " booked. Price: " + price);
+    @Override
+    public void cancelRide(){
+        System.out.println("Ride Got Cancelled");
     }
-
-    public void cancel() {
-        int refund = price - 200;
-        System.out.println("Train " + id + " cancelled. Refund: " + refund);
+    @Override
+    public void pay(){
+        System.out.println("Car booking payment of " + amount + " done for booking " + id);
     }
 }
-
-
-
-abstract class BusRide implements Booking, Ride {
-    int id;
-    int price;
-    public void book() {
-        System.out.println("Bus " + id + " booked. Price: " + price);
+class Train extends Payments implements Refundable,CancelRide{
+    Train(double amount,String id){
+        super(amount,id);
     }
-    public void cancel() {
+    @Override
+    void pay() {
+        System.out.println("Payment of " + amount + " done for train booking " + id);
+    }
+    public void refund(double amount){
+        System.out.println("The Refunded Amount for Cancelling Ticket is : 960");
+    }
+    @Override
+    public void cancelRide() {
+        System.out.println("Train with booking " + id + " got cancelled");
+    }
 
-        System.out.println("Bus " + id + " cancelled. No refund");
+}
+
+class Bus extends Payments {
+    Bus(double amount, String id) {
+        super(amount, id);
+    }
+
+    @Override
+    void pay() {
+        System.out.println("Bus booking payment of " + amount + " done for booking " + id);
+    }
+
+    @Override
+    void generateReceipt() {
+        System.out.println("Bus ticket generated with booking ID: " + id + " for amount: " + amount);
     }
 }
 
 public class Test {
     public static void main(String[] args) {
+        Cab carBooking = new Cab(500, "CAB101");
+        carBooking.pay();
+        carBooking.generateReceipt();
+        carBooking.cancelRide();
+        carBooking.refund(500);
 
-        CabRide cab = new CabRide() {
-            {
+        System.out.println();
 
-            id =1;
-            price =500;
-        }
-        };
+        Train trainBooking = new Train(1200, "TRN202");
+        trainBooking.pay();
+        trainBooking.generateReceipt();
+        trainBooking.cancelRide();
+        trainBooking.refund(1200);
 
-        TrainRide train = new TrainRide() {
-            {
-                id = 2;
-                price = 1000;}
-        };
+        System.out.println();
 
-        BusRide bus = new BusRide() {
-            {
-                id = 3;
-                price = 200;
-            }};
-
-        try {
-            cab.book();
-            cab.cancel();
-        } catch (Exception e) {
-            System.out.println("Error in cab");
-        }
-        try {
-            train.book();
-            train.cancel();
-        } catch (Exception e) {
-            System.out.println("Error in train");
-        }
-        try {
-            bus.book();
-            bus.cancel();
-        } catch (Exception e) {
-            System.out.println("Error in bus");
-        }
+        Bus busBooking = new Bus(200, "BUS303");
+        busBooking.pay();
+        busBooking.generateReceipt();
     }
 }
