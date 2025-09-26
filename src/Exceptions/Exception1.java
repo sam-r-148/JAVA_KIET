@@ -1,4 +1,4 @@
-package Exception;
+package Exceptions;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,9 +13,6 @@ public class Exception1 {
             System.out.println(e.toString());
             System.out.println(e.getMessage());
         }
-
-
-
 
         // Compile time error - Checked Exception
         try {
@@ -36,7 +33,7 @@ public class Exception1 {
             System.out.println(10 / 0);
         }catch(ArithmeticException e){
 //            e.printStackTrace();
-//            System.out.println(e.toString());
+            System.out.println(e.toString());
 //            System.out.println(e.getMessage());
 
         }
